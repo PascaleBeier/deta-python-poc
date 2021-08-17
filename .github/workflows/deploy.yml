@@ -1,0 +1,23 @@
+---
+on: [push]
+
+env:
+  DETA_PYTHON_POC_SIGNING_KEY: ${{ secrets.DETA_PYTHON_POC_SIGNING_KEY }}
+  GIT_COMMIT_SHA: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: BogDAAAMN/deta-deploy-action@v1.0.1
+        with:
+          deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
+          deta-name: ${{ secrets.DETA_MICRO }}
+      - run: |
+          echo "DETA_PYTHON_POC_SIGNING_KEY=${{ env.DETA_PYTHON_POC_SIGNING_KEY }}" | tee -a .env > /dev/null
+          echo "GIT_COMMIT_SHA=${{ env.GIT_COMMIT_SHA }}" | tee -a .env > /dev/null
+          export DETA_ACCESS_TOKEN=${{ secrets.deta-access-token }}
+          ~/.deta/bin/deta update -e .env
+          
+          
