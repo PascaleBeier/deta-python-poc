@@ -15,9 +15,10 @@ jobs:
           deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
           deta-name: ${{ secrets.DETA_MICRO }}
       - run: |
+          # Create .env
           echo "DETA_PYTHON_POC_SIGNING_KEY=${{ env.DETA_PYTHON_POC_SIGNING_KEY }}" | tee -a .env > /dev/null
           echo "GIT_COMMIT_SHA=${{ env.GIT_COMMIT_SHA }}" | tee -a .env > /dev/null
-          export DETA_ACCESS_TOKEN=${{ secrets.deta-access-token }}
+          # Deploy environment variables
+          export DETA_ACCESS_TOKEN=${{ secrets.DETA_ACCESS_TOKEN }}
           ~/.deta/bin/deta update -e .env
-          
           
